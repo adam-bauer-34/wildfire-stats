@@ -1,0 +1,1 @@
+`powerlaw.py` is a fork of the `powerlaw` package. We altered the package source and amended functionality.

@@ -1,0 +1,26 @@
+# Time-varying MLE (wildfire_stats.fitting.fits.analyze_time_varying_mle).
+# Parameters are (a1, b1, a2, b2) with p1(t) = a1 + b1*t, p2(t) = a2 + b2*t
+# (TPL: alpha = 1 + exp(a1 + b1*t), lambda = exp(a2 + b2*t)).
+
+de_bounds:          # [a1, b1, a2, b2] search bounds for differential evolution
+  truncated_power_law:   [[-2.0, 2.0], [-1.0, 1.0], [-9.0, 0.0], [-1.0, 1.0]]
+  generalized_pareto:    [[-1.0, 2.0], [-1.0, 1.0], [1.0e-6, 10.0], [-1.0, 1.0]]
+  power_law:             [[0.0, 5.0], [-1.0, 1.0]]   # TODO(bug): only 2 entries (HANDOFF 4h)
+  weibull:               [[1.0e-3, 10.0], [-1.0, 1.0], [1.0e-3, 50.0], [-1.0, 10.0]]  # b2 (-1, 10) likely a typo
+  stretched_exponential: [[1.0e-4, 50.0], [-1.0, 1.0], [0.1, 5.0], [-1.0, 1.0]]
+  default:               [[-5.0, 5.0], [-1.0, 1.0], [-5.0, 5.0], [-1.0, 1.0]]   # used by lognormal
+
+param_clips:        # applied in neg_loglik to p(t) before calling logpdf
+  lognormal:             {sigma: [1.0e-6, 50.0]}
+  generalized_pareto:    {xi: [-1.0, 2.0], sigma: [1.0e-6, 10.0]}
+  power_law:             {alpha: [0.0, 5.0]}
+  weibull:               {k: [1.0e-3, 10.0], lam: [1.0e-3, 50.0]}
+  stretched_exponential: {lam: [1.0e-4, 50.0], beta: [0.1, 5.0]}
+
+logpdf_clips:       # applied inside each logpdf_* (wildfire_stats.fitting.stats_helpers.logpdf)
+  lognormal:             {sigma: [1.0e-6, 50.0]}
+  power_law:             {alpha: [0.0, 5.0]}
+  truncated_power_law:   {alpha: [0.0, 5.0], lambd: [0.0, 5.0], Z: [1.0e-300, 1.0e+300]}
+  generalized_pareto:    {xi: [-1.0, 2.0], sigma: [1.0e-6, 10.0]}
+  weibull:               {k: [1.0e-6, 50.0], lam: [1.0e-6, 50.0], z: [1.0e-12, 1.0e+6]}
+  stretched_exponential: {lam: [1.0e-6, 50.0], beta: [0.1, 5.0]}

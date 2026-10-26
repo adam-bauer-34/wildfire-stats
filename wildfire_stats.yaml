@@ -1,0 +1,47 @@
+# Conda environment for wildfire-stats (Linux / x86_64).
+#   mamba env create -f env.yaml
+#   conda activate wildfire-stats
+#
+# Built from the imports in src/ and dev/*.ipynb. Versions follow the
+# original macOS environment.yml (Python 3.10, numpy 2.2, GDAL 3.10, ...),
+# but without platform-specific build strings so it solves on Linux.
+name: wildfire-stats
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - pip
+
+  # Core scientific stack
+  - numpy=2.2
+  - scipy=1.15
+  - pandas=2.3
+  - mpmath                # wildfire_powerlaw (incomplete gamma, lerchphi, erfc)
+  - scikit-learn=1.7      # LinearRegression, classification metrics
+  - statsmodels=0.14
+  - pyyaml                # config/*.yaml
+
+  # Geospatial
+  - gdal=3.10             # also provides gdalinfo / gdal_translate (dev/3_*.ipynb)
+  - libgdal-hdf4=3.10     # HDF4 driver, needed to read MODIS .hdf tiles
+  - rasterio=1.4
+  - geopandas=1.1
+  - shapely=2.1
+  - pyproj=3.7
+  - pyogrio               # geopandas' default I/O engine
+  - cartopy
+
+  # Plotting
+  - matplotlib=3.10
+
+  # Notebooks (dev/)
+  - ipython
+  - ipykernel
+  - jupyterlab
+
+  # Tests (tests/)
+  - pytest
+  - nbformat
+
+  # install this package
+  - pip: ["-e ."]

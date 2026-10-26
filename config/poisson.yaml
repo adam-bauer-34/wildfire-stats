@@ -1,0 +1,6 @@
+# Poisson GLM of yearly tail counts (wildfire_stats.fitting.fits.fit_poisson_tail_trend).
+# A_min grid starts at min_fire (default_assumptions.yaml).
+
+n_thresholds: 100   # log-spaced A_min values from min_fire to the global max area
+min_years: 10       # minimum unique years for a group to be fit
+alpha: 0.05         # significance level for beta_1

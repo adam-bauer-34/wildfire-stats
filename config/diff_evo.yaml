@@ -1,0 +1,18 @@
+# scipy.optimize.differential_evolution kwargs for the time-varying MLE.
+
+main:        # point estimate
+  strategy: best1bin
+  maxiter: 600
+  popsize: 15
+  polish: true
+  seed: 42
+  updating: deferred
+  workers: 1
+  init: latinhypercube
+
+bootstrap:   # each bootstrap refit; unlisted settings stay at scipy defaults
+  maxiter: 300
+  polish: false
+  seed: null   # TODO: makes bootstrap SEs non-reproducible
+  updating: deferred
+  workers: 1

@@ -1,0 +1,51 @@
+# Analysis assumptions. Library functions take `None` defaults that resolve to
+# these values (see wildfire_stats.config.resolve); pass an explicit argument
+# to override. Floats need a decimal point (1.0e-3, not 1e-3) for PyYAML.
+
+min_fire: 4                 # km^2; xmin for every fit (nb1 Kuiper scan); also Poisson A_min start
+
+# --- projections
+equal_area_crs: EPSG:6933   # all area computations
+mtbs_crs: EPSG:4269         # set_crs override on MTBS read
+gfa_crs: EPSG:4326
+
+# --- "good fit" criteria
+min_fires: 400              # n gate: min_total / min_n / min_count / min_fires
+llhr_cutoff: 2.0            # delta-loglik "competitive fit" cutoff
+max_rel_error: 1.0          # SE/|p| gate for a "good" fit
+ci_z: 1.96                  # 95% CI used in significance flags
+
+# --- bootstrap / RNG
+static_R_boot: 50
+timevary_R_boot: 50
+random_seed: 42             # static bootstrap random_state + time-varying resampling rng
+
+# --- time-varying model
+prior_weight: 1.0e-3        # weak prior toward the static fit
+trend_unit_years: 10        # year_c = (year - mean) / 10
+
+# --- data windows
+modis_years: [2003, 2016]
+
+# --- land-cover classification
+modis_nodata: 255
+modis_water_class: 17
+refined_base_biomes:
+  - Deciduous Broadleaf forest
+  - Evergreen Broadleaf forest
+  - Open shrublands
+  - Grasslands
+refined_lon_splits:
+  Evergreen Broadleaf forest: -100
+  Open shrublands: -130
+
+# --- primary distribution per biome (was dist_map, repeated 3x in temporal_analysis)
+primary_distribution:
+  Deciduous Broadleaf forest: generalized_pareto
+  Evergreen Broadleaf forest: generalized_pareto
+  Mixed forest: generalized_pareto
+  Savannas: truncated_power_law
+  Woody savannas: truncated_power_law
+  Evergreen Needleleaf forest: lognormal
+  Grasslands: lognormal
+  Open shrublands: lognormal
